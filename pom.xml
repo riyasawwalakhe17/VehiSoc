@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.vehisoc</groupId>
 	<artifactId>VehiSoc</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>VehiSoc</name>
 	<description>Smart Vehicle Management for Societies</description>
 	<url/>
