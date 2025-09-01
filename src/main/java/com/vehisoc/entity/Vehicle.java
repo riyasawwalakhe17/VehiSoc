@@ -21,6 +21,7 @@ public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private int id;
 
     @NotBlank(message = "Registration number is mandatory")

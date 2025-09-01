@@ -21,6 +21,7 @@ public class Resident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY) // <-- hide id in Swagger
     private int id;
 
     @NotBlank(message = "First name is mandatory")
