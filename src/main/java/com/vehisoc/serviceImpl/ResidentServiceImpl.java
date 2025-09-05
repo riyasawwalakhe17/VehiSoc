@@ -6,6 +6,8 @@ import com.vehisoc.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ResidentServiceImpl implements ResidentService {
 
@@ -20,4 +22,12 @@ public class ResidentServiceImpl implements ResidentService {
         residentRepository.save(resident);
         return "Resident details added successfully";
     }
+
+    @Override
+    public List<Resident> getAllResidents() {
+        List<Resident> residentList = residentRepository.findAll();
+        return residentList;
+    }
+
+
 }
