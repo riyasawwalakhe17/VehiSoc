@@ -1,5 +1,6 @@
 package com.vehisoc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ public class Resident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY) // <-- hide id in Swagger
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private int id;
 
     @NotBlank(message = "First name is mandatory")
@@ -45,8 +46,6 @@ public class Resident {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Resident type is mandatory")
     private ResidentType residentType;
-
-
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vehicle> vehicleList;

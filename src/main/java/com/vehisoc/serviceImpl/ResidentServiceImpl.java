@@ -29,5 +29,21 @@ public class ResidentServiceImpl implements ResidentService {
         return residentList;
     }
 
+    @Override
+    public List<Resident> getResidentByName(String fName, String lName) {
+        // validation: no numeric values in names
+        if ((fName != null && fName.matches(".*\\d.*")) ||
+                (lName != null && lName.matches(".*\\d.*"))) {
+            throw new IllegalArgumentException("Names cannot contain numeric values");
+        }
 
+        List<Resident> residents = residentRepository.findByFirstAndLastName(fName, lName);
+
+        if (residents.isEmpty()) {
+            throw new RuntimeException("No resident found with the given details");
+        }
+
+        return residents;
+
+    }
 }

@@ -29,5 +29,16 @@ public class ResidentController {
     }
 
 
-
+    @GetMapping("/search")
+    public ResponseEntity<?> searchResident(@RequestParam(required = false) String fName,
+                                            @RequestParam(required = false) String lName) {
+        try {
+            List<Resident> residents = residentService.getResidentByName(fName, lName);
+            return ResponseEntity.ok(residents);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
