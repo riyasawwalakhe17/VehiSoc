@@ -1,5 +1,7 @@
 package com.vehisoc.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -38,6 +40,7 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Vehicle type is mandatory")
     @JsonProperty("vtype")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Type vType;
 
     private LocalDateTime associationActivatedAt;
@@ -51,6 +54,7 @@ public class Vehicle {
 
     @ManyToOne
     @JoinColumn(name = "resident_id" , nullable = false)
+    @JsonIgnore
     private Resident resident;
 
     @PrePersist
