@@ -51,4 +51,7 @@ public class Resident {
     @JsonIgnore
     private List<Vehicle> vehicleList;
 
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Visitors> visitors;
+
 }
