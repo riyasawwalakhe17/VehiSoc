@@ -1,7 +1,9 @@
 package com.vehisoc.serviceImpl;
 
+import com.vehisoc.dto.VisitorResponseDTO;
 import com.vehisoc.entity.Resident;
 import com.vehisoc.entity.Visitors;
+import com.vehisoc.mapper.VisitorMapper;
 import com.vehisoc.repository.ResidentRepository;
 import com.vehisoc.repository.VisitorRepository;
 import com.vehisoc.service.VisitorService;
@@ -63,4 +65,18 @@ public class VisitorServiceImpl implements VisitorService {
         visitorRepository.save(visitor);
         return "Visitor added successfully for resident ID: " + residentId;
     }
-}
+
+    @Override
+    public VisitorResponseDTO getVisitorByRegNo(String regNo) {
+
+        if (regNo == null || regNo.trim().length() != 10) {
+            throw new IllegalArgumentException("Invalid registration number. It must be exactly 10 characters.");
+        }
+
+        Visitors visitor = visitorRepository.findVisitorWithResidentByRegNo(regNo.trim())
+                .orElseThrow(() -> new RuntimeException("No visitor found with registration number: " + regNo));
+
+        return VisitorMapper.toDTO(visitor);
+    }
+    }
+
