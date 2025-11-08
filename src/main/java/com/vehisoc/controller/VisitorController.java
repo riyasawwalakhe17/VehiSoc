@@ -1,12 +1,15 @@
 package com.vehisoc.controller;
 
 import com.vehisoc.dto.VisitorResponseDTO;
+import com.vehisoc.entity.VisitorType;
 import com.vehisoc.entity.Visitors;
 import com.vehisoc.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/visitors")
@@ -32,5 +35,12 @@ public class VisitorController {
     public ResponseEntity<String> updateVisitorExitTime(@PathVariable String vehicleRegNo) {
         String response = visitorService.updateExitTime(vehicleRegNo);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/filter")
+    public List<VisitorResponseDTO> getActiveVisitors(
+            @RequestParam(required = false) List<VisitorType> types
+    ) {
+        return visitorService.getActiveVisitors(types);
     }
 }

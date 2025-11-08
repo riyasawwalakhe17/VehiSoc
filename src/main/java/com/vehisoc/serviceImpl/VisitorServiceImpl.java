@@ -2,6 +2,7 @@ package com.vehisoc.serviceImpl;
 
 import com.vehisoc.dto.VisitorResponseDTO;
 import com.vehisoc.entity.Resident;
+import com.vehisoc.entity.VisitorType;
 import com.vehisoc.entity.Visitors;
 import com.vehisoc.mapper.VisitorMapper;
 import com.vehisoc.repository.ResidentRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -99,5 +101,25 @@ public class VisitorServiceImpl implements VisitorService {
 
         return "Exit time updated successfully for vehicle: " + vehicleRegNo;
     }
+
+    @Override
+    public List<VisitorResponseDTO> getActiveVisitors(List<VisitorType> types) {
+        List<Visitors> visitors;
+
+        if (types == null || types.isEmpty()) {
+            // No filter provided → return all active visitors
+            visitors = visitorRepository.findByIsActiveVisitorTrue();
+        } else {
+            // Filter by given visitor types
+            visitors = visitorRepository.findByIsActiveVisitorTrueAndVisitorTypeIn(types);
+        }
+
+        return visitors.stream()
+                .map(VisitorMapper::toDTO)
+                .toList();
+
+    }
+
+
 }
 
