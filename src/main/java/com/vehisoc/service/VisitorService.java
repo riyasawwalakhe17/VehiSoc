@@ -9,4 +9,5 @@ public interface VisitorService {
 
     VisitorResponseDTO getVisitorByRegNo(String regNo);
 
+    String updateExitTime(String vehicleRegNo);
 }

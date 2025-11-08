@@ -10,6 +10,7 @@ import com.vehisoc.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -78,5 +79,25 @@ public class VisitorServiceImpl implements VisitorService {
 
         return VisitorMapper.toDTO(visitor);
     }
+
+    @Override
+    public String updateExitTime(String vehicleRegNo) {
+        if (vehicleRegNo == null || vehicleRegNo.length() != 10) {
+            throw new IllegalArgumentException("Invalid registration number. It must be exactly 10 characters long.");
+        }
+
+
+        Visitors visitor = visitorRepository.findByVehicleRegNo(vehicleRegNo)
+                .orElseThrow(() -> new RuntimeException(
+                        "Visitor not found with registration number: " + vehicleRegNo));
+
+
+        visitor.setTimeOut(LocalDateTime.now());
+        visitor.setActiveVisitor(false);
+
+        visitorRepository.save(visitor);
+
+        return "Exit time updated successfully for vehicle: " + vehicleRegNo;
     }
+}
 

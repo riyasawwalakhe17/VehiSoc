@@ -27,4 +27,10 @@ public class VisitorController {
         VisitorResponseDTO response = visitorService.getVisitorByRegNo(regNo);
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/update-exit-time/{vehicleRegNo}")
+    public ResponseEntity<String> updateVisitorExitTime(@PathVariable String vehicleRegNo) {
+        String response = visitorService.updateExitTime(vehicleRegNo);
+        return ResponseEntity.ok(response);
+    }
 }
