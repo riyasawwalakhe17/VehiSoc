@@ -22,6 +22,7 @@ public class VisitorResponseDTO {
     private Long phoneNumber;
     private VisitorType visitorType;
     private boolean isActiveVisitor;
+    private String visitDuration;
     private ResidentDTO resident;
 
 }

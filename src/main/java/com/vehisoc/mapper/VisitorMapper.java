@@ -19,6 +19,7 @@ public class VisitorMapper {
         dto.setPhoneNumber(visitor.getPhoneNumber());
         dto.setVisitorType(visitor.getVisitorType());
         dto.setActiveVisitor(visitor.isActiveVisitor());
+        dto.setVisitDuration(visitor.getVisitDuration());
 
         Resident r = visitor.getResident();
         if (r != null) {

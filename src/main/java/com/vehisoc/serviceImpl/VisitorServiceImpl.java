@@ -11,6 +11,7 @@ import com.vehisoc.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public String addVisitor(Visitors visitor, Integer residentId) {
 
-        // 🔍 Validate mandatory fields
+
         if (visitor.getVisitorName() == null || visitor.getVisitorName().trim().isEmpty()) {
             throw new IllegalArgumentException("Visitor name is mandatory");
         }
@@ -56,7 +57,7 @@ public class VisitorServiceImpl implements VisitorService {
             throw new IllegalArgumentException("Time-In is required");
         }
 
-        // 🔗 Validate and map resident
+
         Optional<Resident> residentOpt = residentRepository.findById(residentId);
         if (residentOpt.isEmpty()) {
             throw new RuntimeException("Resident with ID " + residentId + " not found");
@@ -76,41 +77,58 @@ public class VisitorServiceImpl implements VisitorService {
             throw new IllegalArgumentException("Invalid registration number. It must be exactly 10 characters.");
         }
 
-        Visitors visitor = visitorRepository.findVisitorWithResidentByRegNo(regNo.trim())
-                .orElseThrow(() -> new RuntimeException("No visitor found with registration number: " + regNo));
+        List<Visitors> visitors = visitorRepository.findVisitorsByRegNoOrdered(regNo.trim());
 
-        return VisitorMapper.toDTO(visitor);
+        if (visitors.isEmpty()) {
+            throw new RuntimeException("No visitor found with registration number: " + regNo);
+        }
+
+
+        Visitors latestVisitor = visitors.get(0);
+
+        return VisitorMapper.toDTO(latestVisitor);
     }
 
     @Override
     public String updateExitTime(String vehicleRegNo) {
-        if (vehicleRegNo == null || vehicleRegNo.length() != 10) {
-            throw new IllegalArgumentException("Invalid registration number. It must be exactly 10 characters long.");
+        List<Visitors> visitors = visitorRepository.findVisitorsByRegNoOrdered(vehicleRegNo.trim());
+
+        if (visitors.isEmpty()) {
+            throw new RuntimeException("No active visitor found with vehicleRegNo: " + vehicleRegNo);
         }
 
 
-        Visitors visitor = visitorRepository.findByVehicleRegNo(vehicleRegNo)
-                .orElseThrow(() -> new RuntimeException(
-                        "Visitor not found with registration number: " + vehicleRegNo));
+        Visitors visitor = visitors.get(0);
 
+        if (!visitor.isActiveVisitor()) {
+            return "Visitor already checked out.";
+        }
 
         visitor.setTimeOut(LocalDateTime.now());
         visitor.setActiveVisitor(false);
 
+
+        Duration duration = Duration.between(visitor.getTimeIn(), visitor.getTimeOut());
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+
+        String formattedDuration = String.format("%02d:%02d", hours, minutes);
+        visitor.setVisitDuration(formattedDuration);
+
         visitorRepository.save(visitor);
 
-        return "Exit time updated successfully for vehicle: " + vehicleRegNo;
+        return "Exit time updated successfully. Duration: " + formattedDuration;
     }
+
 
     @Override
     public List<VisitorResponseDTO> getActiveVisitors(List<VisitorType> types) {
         List<Visitors> visitors;
 
         if (types == null || types.isEmpty()) {
-            // No filter provided → return all active visitors
             visitors = visitorRepository.findByIsActiveVisitorTrue();
         } else {
-            // Filter by given visitor types
+
             visitors = visitorRepository.findByIsActiveVisitorTrueAndVisitorTypeIn(types);
         }
 

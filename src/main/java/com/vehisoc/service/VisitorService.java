@@ -14,7 +14,7 @@ public interface VisitorService {
 
     String updateExitTime(String vehicleRegNo);
 
-    List<VisitorResponseDTO> getActiveVisitors(List<com.vehisoc.entity.VisitorType> types);
+    List<VisitorResponseDTO> getActiveVisitors(List<VisitorType> types);
 
 
 }

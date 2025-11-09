@@ -46,6 +46,7 @@ public class Visitors {
     @NotNull(message = "Visitor type is required")
     private VisitorType visitorType;
 
+    private String visitDuration;
 
     @ManyToOne
     @JoinColumn(name = "resident_id", nullable = false)

@@ -13,14 +13,19 @@ import java.util.Optional;
 @Repository
 public interface VisitorRepository extends JpaRepository<Visitors, Integer> {
 
-    @Query("SELECT v FROM Visitors v JOIN FETCH v.resident r WHERE v.vehicleRegNo = :regNo")
-    Optional<Visitors> findVisitorWithResidentByRegNo(@Param("regNo") String regNo);
+    @Query("""
+        SELECT v FROM Visitors v
+        JOIN FETCH v.resident r
+        WHERE v.vehicleRegNo = :regNo
+        ORDER BY v.timeIn DESC
+    """)
+    List<Visitors> findVisitorsByRegNoOrdered(@Param("regNo") String regNo);
 
     Optional<Visitors> findByVehicleRegNo(String vehicleRegNo);
 
-    // Get all active visitors
+
     List<Visitors> findByIsActiveVisitorTrue();
 
-    // Get active visitors filtered by a list of types
+
     List<Visitors> findByIsActiveVisitorTrueAndVisitorTypeIn(List<VisitorType> types);
 }
