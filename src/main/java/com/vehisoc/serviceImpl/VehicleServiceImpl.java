@@ -54,7 +54,7 @@ public class VehicleServiceImpl implements VehicleService {
                 .orElseThrow(() -> new RuntimeException(
                         "No vehicle found with registration number: " + regNo));
 
-        // ✅ Convert Entity → DTO
+
         return ResidentMapper.toDTO(resident);
     }
 }

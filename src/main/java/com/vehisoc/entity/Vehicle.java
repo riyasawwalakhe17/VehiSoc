@@ -47,10 +47,7 @@ public class Vehicle {
 
     private LocalDateTime associationDeactivatedAt;
 
-
-
     private  boolean isVehicleActive;
-
 
     @ManyToOne
     @JoinColumn(name = "resident_id" , nullable = false)

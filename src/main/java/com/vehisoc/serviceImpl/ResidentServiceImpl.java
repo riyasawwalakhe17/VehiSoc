@@ -31,7 +31,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public List<Resident> getResidentByName(String fName, String lName) {
-        // validation: no numeric values in names
+
         if ((fName != null && fName.matches(".*\\d.*")) ||
                 (lName != null && lName.matches(".*\\d.*"))) {
             throw new IllegalArgumentException("Names cannot contain numeric values");

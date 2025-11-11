@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    // Handles not found cases like missing visitor or resident
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex) {
         return ResponseEntity
